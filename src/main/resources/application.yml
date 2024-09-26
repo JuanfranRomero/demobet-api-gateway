@@ -1,7 +1,7 @@
 # Spring properties
 spring:
   application:
-    name: users-service  # Service registers under this name
+    name: api-gateway  # Service registers under this name
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3355/demo

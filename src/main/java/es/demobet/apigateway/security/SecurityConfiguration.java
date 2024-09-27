@@ -35,7 +35,8 @@ public class SecurityConfiguration {
 
         http.csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> {
-                    authorize.requestMatchers("/auth/**").permitAll();
+                    authorize.requestMatchers("/auth/generate_token").permitAll();
+                    authorize.requestMatchers("/users/signup").permitAll();
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());
 

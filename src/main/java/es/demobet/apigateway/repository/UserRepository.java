@@ -13,6 +13,4 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 
 	public Optional<User> getByUsername(@Param("username") String username);
 	
-	public Optional<User> getByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
-
 }

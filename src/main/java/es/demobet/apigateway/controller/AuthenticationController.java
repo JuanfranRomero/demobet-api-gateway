@@ -2,6 +2,9 @@ package es.demobet.apigateway.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import es.demobet.apigateway.model.dto.UserDto;
 import es.demobet.apigateway.model.dto.request.LoginRequest;
-import es.demobet.apigateway.model.dto.request.RegisterRequest;
 import es.demobet.apigateway.model.dto.response.LoginResponse;
 import es.demobet.apigateway.model.entity.User;
 import es.demobet.apigateway.service.AuthenticationService;
@@ -26,15 +28,17 @@ public class AuthenticationController {
 	@Autowired
 	private JwtService jwtService;
 	
-	@PostMapping("/signup")
-    public ResponseEntity<UserDto> register(@RequestBody RegisterRequest registerRequest) {
-        User registeredUser = authenticationService.signup(registerRequest);
+	@GetMapping("/me")
+    public ResponseEntity<UserDto> authenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        return ResponseEntity.ok(ObjectMapperUtils.map(registeredUser, UserDto.class));
+        User currentUser = (User) authentication.getPrincipal();
+
+        return ResponseEntity.ok(ObjectMapperUtils.map(currentUser, UserDto.class));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginRequest loginRequest) {
+    @PostMapping("/generate_token")
+    public ResponseEntity<LoginResponse> generateToken(@RequestBody LoginRequest loginRequest) {
         User authenticatedUser = authenticationService.login(loginRequest);
 
         String jwtToken = jwtService.generateToken(authenticatedUser);

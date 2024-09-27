@@ -1,12 +1,33 @@
-# Spring properties
 spring:
+
+  # Service name in Eureka
   application:
-    name: api-gateway  # Service registers under this name
+    name: api-gateway 
+    
+  # Database MySQL
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3355/demo
     username: root
     password: bfhs7Hi38o1Bas8jH90VS
+    
+  # Spring Cloud Gateway MVC
+  cloud: 
+    gateway:
+      mvc:
+        http-client:
+          type: AUTODETECT
+          connect-timeout: 60s
+          read-timeout: 60s
+        routes: 
+          - id: wallet-service
+            uri: lb://wallet-service
+            predicates: 
+              - Path=/wallet/**
+          - id: users-service
+            uri: lb://users-service
+            predicates: 
+              - Path=/users/**
      
 # JWT
 security:
@@ -14,12 +35,12 @@ security:
     secret-key: 0f08458d217e4eccbc506997e24ffe5e039072c4fc76fe52f94278337795e8af
     expiration-time: 3600000
 
-# Discovery Server Access
+# Discovery Eureka Server
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:1111/eureka/
+      defaultZone: http://localhost:9999/eureka/
 
-# HTTP Server
+# Tomcat port
 server:
-  port: 8080   # HTTP (Tomcat) port
+  port: 1000

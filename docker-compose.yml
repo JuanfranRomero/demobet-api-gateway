@@ -1,0 +1,48 @@
+services:
+
+  service-discovery:
+    image: service-discovery
+    container_name: service-discovery
+    ports:
+      - 9999:9999
+    networks:
+      - springboot-mysql-network
+
+  api-gateway:
+    image: api-gateway
+    container_name: api-gateway
+    ports:
+      - 8080:1000
+    depends_on:
+      - mysqldb
+      - service-discovery
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/demo
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=bfhs7Hi38o1Bas8jH90VS
+    networks:
+      - springboot-mysql-network
+  
+  mysqldb:
+    image: mysql:8.0.33
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=demo
+      - MYSQL_ROOT_PASSWORD=bfhs7Hi38o1Bas8jH90VS
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - springboot-mysql-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      retries: 10
+      interval: 3s
+      timeout: 30s
+      
+volumes:
+  mysql-data:
+
+networks:
+  springboot-mysql-network:
+    name: springboot-mysql-network

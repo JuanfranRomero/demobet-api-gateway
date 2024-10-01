@@ -13,11 +13,14 @@ import es.demobet.apigateway.service.AuthenticationService;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
+	private final UserRepository userRepository;
+	private final AuthenticationManager authenticationManager;
+
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	public AuthenticationServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager) {
+		this.userRepository = userRepository;
+		this.authenticationManager = authenticationManager;
+	}
 
 	@Override
 	public User login(LoginRequest loginRequest) {

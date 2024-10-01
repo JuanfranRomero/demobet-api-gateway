@@ -22,12 +22,15 @@ import es.demobet.apigateway.utils.ObjectMapperUtils;
 @RequestMapping("/auth")
 public class AuthenticationController {
 	
-	@Autowired
-	private AuthenticationService authenticationService;
+	private final AuthenticationService authenticationService;	
+	private final JwtService jwtService;
 	
 	@Autowired
-	private JwtService jwtService;
-	
+	public AuthenticationController(AuthenticationService authenticationService, JwtService jwtService) {
+		this.authenticationService = authenticationService;
+		this.jwtService = jwtService;
+	}
+
 	@GetMapping("/me")
     public ResponseEntity<UserDto> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

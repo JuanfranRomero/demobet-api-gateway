@@ -1,4 +1,4 @@
-package es.demobet.apigateway.security;
+package es.demobet.apigateway.configuration;
 
 import java.io.IOException;
 

@@ -28,6 +28,10 @@ spring:
             uri: lb://users-service
             predicates: 
               - Path=/users/**
+          - id: bets-service
+            uri: lb://bets-service
+            predicates: 
+              - Path=/bets/**
      
 # JWT
 security:
